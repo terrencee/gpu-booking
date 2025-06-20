@@ -1,0 +1,76 @@
+deployment id :
+
+AKfycbxbF95YokEY-mMeatyixnW5m5d9QlUHMuIHtQDEYwCkzGspPMGMTIgJfahPmxbOJFc
+
+Web APP
+URL :
+
+https://script.google.com/macros/s/AKfycbxbF95YokEY-mMeatyixnW5m5d9QlUHMuIHtQDEYwCkzGspPMGMTIgJfahPmxbOJFc/exec
+
+Library
+Url :
+
+https://script.google.com/macros/library/d/1t-Im2bqUDzfWGON47xU3zK4_BFD1yATBZWAnygrYlAMOphlsfrV-G1Be/2
+
+Apps script:
+
+function doGet() {
+  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("GPU_Slot_Booking");
+  const data = sheet.getDataRange().getValues();
+  const headers = data[0];
+  const results = [];
+
+  for (let i = 1; i < data.length; i++) {
+    const row = data[i];
+    const name = row[1];
+    const date = new Date(row[2]);
+    const startTime = new Date(`${row[2]} ${row[3]}`);
+    const endTime = new Date(`${row[2]} ${row[4]}`);
+
+    results.push({
+      title: name,
+      start: startTime.toISOString(),
+      end: endTime.toISOString()
+    });
+  }
+
+  return ContentService
+    .createTextOutput(JSON.stringify(results))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
+
+
+
+
+function doGet() {
+  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheets()[0];
+  Logger.log("Sheet name: " + sheet.getName());
+  const data = sheet.getDataRange().getValues();
+  const headers = data[0];
+  const results = [];
+
+  // Only process if more than just the header row
+  if (data.length > 1) {
+    for (let i = 1; i < data.length; i++) {
+      const row = data[i];
+
+      if (row[2] && row[3] && row[4]) { // date, start time, end time must exist
+        const name = row[1];
+        const startTime = new Date(`${row[2]} ${row[3]}`);
+        const endTime = new Date(`${row[2]} ${row[4]}`);
+
+        results.push({
+          title: name,
+          start: startTime.toISOString(),
+          end: endTime.toISOString()
+        });
+      }
+    }
+  }
+
+  return ContentService
+    .createTextOutput(JSON.stringify(results))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+

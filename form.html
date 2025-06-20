@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Book a GPU Slot</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      padding: 40px;
+    }
+    form {
+      display: inline-block;
+      text-align: left;
+      max-width: 400px;
+    }
+    label, input {
+      display: block;
+      margin-bottom: 15px;
+      width: 100%;
+    }
+    input[type="submit"] {
+      background: #28a745;
+      color: white;
+      border: none;
+      padding: 10px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h2>Book a GPU Slot</h2>
+  <form id="bookingForm">
+    <label>Name: <input type="text" name="title" required></label>
+    <label>Date: <input type="date" name="date" required></label>
+    <label>Start Time: <input type="time" name="start" required></label>
+    <label>End Time: <input type="time" name="end" required></label>
+    <input type="submit" value="Submit Booking">
+  </form>
+
+  <script>
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxbF95YokEY-mMeatyixnW5m5d9QlUHMuIHtQDEYwCkzGspPMGMTIgJfahPmxbOJFc/exec";
+
+    document.getElementById("bookingForm").addEventListener("submit", async function (e) {
+      e.preventDefault();
+      const form = e.target;
+      const data = {
+        title: form.title.value,
+        date: form.date.value,
+        start: form.start.value,
+        end: form.end.value
+      };
+
+      const res = await fetch(SCRIPT_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      });
+
+      const result = await res.json();
+      alert(result.message);
+      window.location.href = "index.html";
+    });
+  </script>
+</body>
+</html>
