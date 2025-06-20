@@ -45,18 +45,17 @@
     document.getElementById("bookingForm").addEventListener("submit", async function (e) {
       e.preventDefault();
       const form = e.target;
-      const data = {
-        title: form.title.value,
-        date: form.date.value,
-        start: form.start.value,
-        end: form.end.value
-      };
+      const formData = new FormData();
+formData.append("title", form.title.value);
+formData.append("date", form.date.value);
+formData.append("start", form.start.value);
+formData.append("end", form.end.value);
 
-      const res = await fetch(SCRIPT_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data)
-      });
+const res = await fetch(SCRIPT_URL, {
+  method: "POST",
+  body: formData
+});
+
 
       const result = await res.json();
       alert(result.message);
